@@ -1,0 +1,11 @@
+
+
+import dlib
+
+print("Dlib version:", dlib.__version__)
+
+# Load a sample image (replace with your path)
+# detector = dlib.get_frontal_face_detector()
+# image = dlib.load_rgb_image("path/to/image.jpg")
+# faces = detector(image)
+# print(f"Number of faces detected: {len(faces)}")
