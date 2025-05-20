@@ -1,46 +1,113 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
+# import firebase_admin
+# from firebase_admin import credentials
+# from firebase_admin import db
 
-cred = credentials.Certificate("serviceAccountsKey.json")
-firebase_admin.initialize_app(cred,{
-    'databaseURL':"https://attendancerecorder-2c65a-default-rtdb.firebaseio.com/"
-})
+# cred = credentials.Certificate("serviceAccountsKey.json")
+# firebase_admin.initialize_app(cred,{
+#     'databaseURL':"https://attendancerecorder-2c65a-default-rtdb.firebaseio.com/"
+# })
 
-ref = db.reference('Students')
+# ref = db.reference('Students')
 
+# data = {
+#     "321654":
+#         {
+#             "name": "Hitanshi",
+#             "major": "IT",
+#             "starting_year": 2025,
+#             "total_attendance": 7,
+#             "standing": "G",
+#             "year": 3,
+#             "last_attendance_time": "2022-12-11 00:54:34"
+#         },
+#     "852741":
+#         {
+#             "name": "Emly Blunt",
+#             "major": "Economics",
+#             "starting_year": 2021,
+#             "total_attendance": 12,
+#             "standing": "B",
+#             "year": 1,
+#             "last_attendance_time": "2022-12-11 00:54:34"
+#         },
+#     "963852":
+#         {
+#             "name": "Elon Musk",
+#             "major": "Physics",
+#             "starting_year": 2020,
+#             "total_attendance": 7,
+#             "standing": "G",
+#             "year": 2,
+#             "last_attendance_time": "2022-12-11 00:54:34"
+#         }
+# }
+
+# for key, value in data.items():
+#     ref.child(key).set(value)
+
+
+
+from pymongo import MongoClient
+
+# Connect to MongoDB (replace the URI below with your connection string)
+client = MongoClient("mongodb://localhost:27017/")  # For local MongoDB
+# For MongoDB Atlas, use something like:
+# client = MongoClient("mongodb+srv://<username>:<password>@cluster0.mongodb.net/test?retryWrites=true&w=majority")
+
+# Select your database (will create if it doesn't exist)
+db = client['attendance_recorder']
+
+# Select your collection (similar to a table in SQL)
+students_collection = db['Students']
+
+# Data to insert
 data = {
-    "321654":
-        {
-            "name": "Hitanshi",
-            "major": "IT",
-            "starting_year": 2025,
-            "total_attendance": 7,
-            "standing": "G",
-            "year": 3,
-            "last_attendance_time": "2022-12-11 00:54:34"
-        },
-    "852741":
-        {
-            "name": "Emly Blunt",
-            "major": "Economics",
-            "starting_year": 2021,
-            "total_attendance": 12,
-            "standing": "B",
-            "year": 1,
-            "last_attendance_time": "2022-12-11 00:54:34"
-        },
-    "963852":
-        {
-            "name": "Elon Musk",
-            "major": "Physics",
-            "starting_year": 2020,
-            "total_attendance": 7,
-            "standing": "G",
-            "year": 2,
-            "last_attendance_time": "2022-12-11 00:54:34"
-        }
+    "321654": {
+        "name": "Hitanshi",
+        "major": "IT",
+        "starting_year": 2025,
+        "total_attendance": 7,
+        "standing": "G",
+        "year": 3,
+        "last_attendance_time": "2022-12-11 00:54:34"
+    },
+    "852741": {
+        "name": "Emly Blunt",
+        "major": "Economics",
+        "starting_year": 2021,
+        "total_attendance": 12,
+        "standing": "B",
+        "year": 1,
+        "last_attendance_time": "2022-12-11 00:54:34"
+    },
+    "963852": {
+        "name": "Elon Musk",
+        "major": "Physics",
+        "starting_year": 2020,
+        "total_attendance": 7,
+        "standing": "G",
+        "year": 2,
+        "last_attendance_time": "2022-12-11 00:54:34"
+    },
+     "555555": {
+        "name": "Vinay",
+        "major": "computer science and Electronics",
+        "starting_year": 2020,
+        "total_attendance":1,
+        "standing": "G",
+        "year": 10,
+        "last_attendance_time": "2022-12-11 00:54:34"
+    }
+    
 }
 
-for key, value in data.items():
-    ref.child(key).set(value)
+# MongoDB stores documents with unique _id fields. We'll use your student ID as _id
+for student_id, student_data in data.items():
+    # Insert or update document with _id = student_id
+    students_collection.update_one(
+        {"_id": student_id},
+        {"$set": student_data},
+        upsert=True  # Insert if doesn't exist
+    )
+
+print("Data inserted/updated successfully in MongoDB")
