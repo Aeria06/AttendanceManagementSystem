@@ -32,7 +32,7 @@ for path in pathList:
 
     # print(path)
     # print(os.path.splitext(path)[0])
-print(studentIds)
+# print(studentIds)
 
 
 def findEncodings(imagesList):

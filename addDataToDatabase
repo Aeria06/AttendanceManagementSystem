@@ -10,11 +10,11 @@ firebase_admin.initialize_app(cred,{
 ref = db.reference('Students')
 
 data = {
-    "123456":
+    "321654":
         {
             "name": "Hitanshi",
-            "major": "Robotics",
-            "starting_year": 2017,
+            "major": "IT",
+            "starting_year": 2025,
             "total_attendance": 7,
             "standing": "G",
             "year": 3,
